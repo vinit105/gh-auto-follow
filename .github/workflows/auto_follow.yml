@@ -1,9 +1,8 @@
 name: Auto Follow Back
 
 on:
-  schedule:
-    - cron: "0 */1 * * *"  # every 6 hours
-  workflow_dispatch:        # manual trigger
+schedule:
+  - cron: "0 */6 * * *"
 
 jobs:
   follow_back:
