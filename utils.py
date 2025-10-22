@@ -1,4 +1,4 @@
-from github import Github
+from github import Github, GithubException
 import logging
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
@@ -18,10 +18,19 @@ def get_following(client, username: str):
     return [f.login for f in user.get_following()]
 
 def follow_user(client, username: str):
-    """Follow a GitHub user."""
+    """Follow a GitHub user using the authenticated account."""
     try:
-        target = client.get_user(username)
-        target.add_to_following()
+        me = client.get_user()  # authenticated user
+        me.add_to_following(username)
         logging.info(f"✅ Followed: {username}")
-    except Exception as e:
-        logging.error(f"❌ Failed to follow {username}: {e}")
+    except GithubException as e:
+        logging.error(f"❌ Failed to follow {username}: {e.data.get('message') if hasattr(e, 'data') else e}")
+
+def unfollow_user(client, username: str):
+    """Unfollow a GitHub user using the authenticated account."""
+    try:
+        me = client.get_user()
+        me.remove_from_following(username)
+        logging.info(f"🚫 Unfollowed: {username}")
+    except GithubException as e:
+        logging.error(f"❌ Failed to unfollow {username}: {e.data.get('message') if hasattr(e, 'data') else e}")
