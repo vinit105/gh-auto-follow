@@ -1,0 +1,30 @@
+name: Auto Follow Back
+
+on:
+  schedule:
+    - cron: "0 */1 * * *"  # every 6 hours
+  workflow_dispatch:        # manual trigger
+
+jobs:
+  follow_back:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run auto-follow script
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_USERNAME: ${{ secrets.GH_USERNAME }}
+        run: |
+          python main.py
