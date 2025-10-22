@@ -1,8 +1,8 @@
 name: Auto Follow Back
 
 on:
-schedule:
-  - cron: "0 */6 * * *"
+  schedule:
+    - cron: "0 */6 * * *"  
 
 jobs:
   follow_back:
